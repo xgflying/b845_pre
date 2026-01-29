@@ -1,0 +1,2 @@
+# Prompt
+Please now allow for multiple charges to be inserted into space with an assigned value q, and give the strength of the electric field and potential at a chosen arbitrary point. The user should be able to implement cartesian coordinates and charge, and receive the total field at the point from multiple charges. Let the user freely add and drop charges between command lines. Clearly document how to add in multiple charges and find the desired field. Create pytests to ensure functionality

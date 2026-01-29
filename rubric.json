@@ -1,0 +1,107 @@
+[
+  {
+    "rubric_id": "R01",
+    "rubric_content": "代码必须实现对多个点电荷叠加的电场向量计算接口（输入为电荷列表与任意点坐标）",
+    "type": "Instruction Following",
+    "necessity": "Explicit",
+    "rationale": "题目要求支持多个电荷并在任意点给出电场；可通过检视代码是否存在“多电荷+点坐标→电场向量”的函数/入口来验证。"
+  },
+  {
+    "rubric_id": "R02",
+    "rubric_content": "电场叠加计算必须基于库仑定律并按矢量形式累加（与位移向量成正比、与距离三次方成反比）",
+    "type": "Correctness",
+    "necessity": "Explicit",
+    "rationale": "题目要求给出电场强度；多点电荷电场的正确物理形式应为 k*q*r_vec/|r|^3 的矢量叠加；可通过代码表达式结构静态判断。"
+  },
+  {
+    "rubric_id": "R03",
+    "rubric_content": "代码必须实现对多个点电荷叠加的电势计算接口（输入为电荷列表与任意点坐标）",
+    "type": "Instruction Following",
+    "necessity": "Explicit",
+    "rationale": "题目明确要求输出电势；可通过检视代码是否存在“多电荷+点坐标→电势”的函数/入口来验证。"
+  },
+  {
+    "rubric_id": "R04",
+    "rubric_content": "电势叠加计算必须按标量形式累加（与电荷成正比、与距离一次方成反比）",
+    "type": "Correctness",
+    "necessity": "Explicit",
+    "rationale": "多点电荷电势应为 Σ(k*q/|r|)；可通过代码中是否以 1/r 形式累加并使用相同物理常数来静态验证。"
+  },
+  {
+    "rubric_id": "R05",
+    "rubric_content": "用户必须能以笛卡尔坐标（x,y,z）输入每个电荷位置与被计算点位置",
+    "type": "Instruction Following",
+    "necessity": "Explicit",
+    "rationale": "题目明确要求实现 cartesian coordinates；可通过命令行参数/函数签名中是否包含 x/y/z 坐标并被用于计算来验证。"
+  },
+  {
+    "rubric_id": "R06",
+    "rubric_content": "命令行必须支持在不同命令间添加与删除电荷（add/drop），且电荷集合在命令之间可被复用",
+    "type": "Instruction Following",
+    "necessity": "Explicit",
+    "rationale": "题目要求用户可在命令行之间自由 add/drop；可通过代码是否实现持久化状态（读写文件/状态存储）以及提供 add/drop 命令来模型验证。"
+  },
+  {
+    "rubric_id": "R07",
+    "rubric_content": "命令行必须提供在指定点输出电场强度与电势的能力（至少包含电场模长与电势数值）",
+    "type": "Instruction Following",
+    "necessity": "Explicit",
+    "rationale": "题目要求给出 electric field strength 和 potential；可通过命令行输出格式中是否包含 |E| 与 V（或等价字段）来静态判断。"
+  },
+  {
+    "rubric_id": "R08",
+    "rubric_content": "当计算点与某个电荷位置重合时，代码必须显式处理并给出可识别的错误（例如抛出异常或打印错误并退出）",
+    "type": "Correctness",
+    "necessity": "Implicit",
+    "rationale": "电场/电势在电荷位置处不可定义，属于关键边界条件；可通过代码是否包含 r==0 的分支处理来验证。"
+  },
+  {
+    "rubric_id": "R09",
+    "rubric_content": "项目文档必须清晰说明如何添加多个电荷、如何删除电荷、以及如何计算指定点的电场与电势",
+    "type": "Documentation & Comments",
+    "necessity": "Explicit",
+    "rationale": "题目明确要求“Clearly document”；可通过 README 是否包含多电荷 add/drop 与 field/potential/eval 的示例命令来模型验证。"
+  },
+  {
+    "rubric_id": "R10",
+    "rubric_content": "必须提供 pytest 测试用例覆盖多电荷电场/电势计算的正确性",
+    "type": "Correctness",
+    "necessity": "Explicit",
+    "rationale": "题目要求“Create pytests”；可通过仓库中是否存在 tests/ 下 pytest 测试文件，并断言多电荷叠加结果来验证。"
+  },
+  {
+    "rubric_id": "R11",
+    "rubric_content": "必须提供 pytest 测试用例覆盖电荷的增删与状态复用（跨命令/跨调用）的行为",
+    "type": "Correctness",
+    "necessity": "Explicit",
+    "rationale": "题目要求用户可在命令行之间自由 add/drop；可通过测试是否验证“写入状态→读取→删除→再读取”的回归链路来模型验证。"
+  },
+  {
+    "rubric_id": "R12",
+    "rubric_content": "命令行对非数字的 q 或坐标输入必须做校验并返回明确错误信息",
+    "type": "Correctness",
+    "necessity": "Implicit",
+    "rationale": "交互式工具需要可用的错误处理以避免静默失败；可通过命令行解析与错误分支的存在（ValueError 捕获/错误提示）来验证。"
+  },
+  {
+    "rubric_id": "R13",
+    "rubric_content": "命令行必须提供在多条命令之间持久化电荷集合的能力（默认路径或可自定义路径）",
+    "type": "Instruction Following",
+    "necessity": "Implicit",
+    "rationale": "题目要求用户可在命令行之间自由添加/删除电荷，隐含需要持久化状态；可通过代码是否包含状态文件读写逻辑来验证。"
+  },
+  {
+    "rubric_id": "R14",
+    "rubric_content": "代码必须兼容原有的单电荷 legacy 用法（即原命令行参数格式）",
+    "type": "Correctness",
+    "necessity": "Implicit",
+    "rationale": "题目未要求破坏原有功能，隐含需保持向后兼容；可通过命令行是否接受原参数格式并返回正确结果来验证。"
+  },
+  {
+    "rubric_id": "R15",
+    "rubric_content": "电场计算结果必须以矢量形式输出（包含 x/y/z 分量），并提供模长作为强度",
+    "type": "Instruction Following",
+    "necessity": "Explicit",
+    "rationale": "题目要求给出电场强度（strength）；强度可理解为模长，而电场本身是矢量；可通过输出格式中是否包含分量与模长来验证。"
+  }
+]

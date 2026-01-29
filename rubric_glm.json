@@ -1,0 +1,92 @@
+[
+  {
+    "rubric_id": "R01",
+    "rubric_content": "代码必须实现对多个点电荷叠加的电场向量计算接口（输入为电荷列表与任意点坐标）",
+    "score": "1",
+    "rationale": "core.py 中实现了 electric_field_at_point(charges, point) 函数，接受电荷列表与坐标，计算并返回电场向量，满足要求。"
+  },
+  {
+    "rubric_id": "R02",
+    "rubric_content": "电场叠加计算必须基于库仑定律并按矢量形式累加（与位移向量成正比、与距离三次方成反比）",
+    "score": "1",
+    "rationale": "core.py 中 electric_field_at_point 使用 dx/r3 等矢量形式累加电场分量，符合库仑定律叠加原理，满足要求。"
+  },
+  {
+    "rubric_id": "R03",
+    "rubric_content": "代码必须实现对多个点电荷叠加的电势计算接口（输入为电荷列表与任意点坐标）",
+    "score": "1",
+    "rationale": "core.py 中实现了 electric_potential_at_point(charges, point) 函数，接受电荷列表与坐标，返回标量电势，满足要求。"
+  },
+  {
+    "rubric_id": "R04",
+    "rubric_content": "电势叠加计算必须按标量形式累加（与电荷成正比、与距离一次方成反比）",
+    "score": "1",
+    "rationale": "core.py 中 electric_potential_at_point 使用 q/r 进行标量累加，符合电势叠加原理，满足要求。"
+  },
+  {
+    "rubric_id": "R05",
+    "rubric_content": "用户必须能以笛卡尔坐标（x,y,z）输入每个电荷位置与被计算点位置",
+    "score": "1",
+    "rationale": "cli.py 中 add 命令接受 x y z 参数，field/potential/eval 命令也接受 x y z 参数，且 core.py 内部计算均基于笛卡尔坐标，满足要求。"
+  },
+  {
+    "rubric_id": "R06",
+    "rubric_content": "命令行必须支持在不同命令间添加与删除电荷（add/drop），且电荷集合在命令之间可被复用",
+    "score": "1",
+    "rationale": "cli.py 提供了 add 和 drop 子命令，并通过 load_charges/save_charges 读写 JSON 文件实现跨命令状态持久化，满足要求。"
+  },
+  {
+    "rubric_id": "R07",
+    "rubric_content": "命令行必须提供在指定点输出电场强度与电势的能力（至少包含电场模长与电势数值）",
+    "score": "1",
+    "rationale": "cli.py 中 eval 命令同时输出电场向量、模长（|E|）与电势（V），field 命令输出电场模长，potential 命令输出电势，满足要求。"
+  },
+  {
+    "rubric_id": "R08",
+    "rubric_content": "当计算点与某个电荷位置重合时，代码必须显式处理并给出可识别的错误（例如抛出异常或打印错误并退出）",
+    "score": "0",
+    "rationale": "core.py 抛出 ValueError，但 cli.py 未在命令层捕获该异常，导致程序崩溃并打印 Python Traceback，未向用户展示友好的错误提示信息，不符合严格要求。"
+  },
+  {
+    "rubric_id": "R09",
+    "rubric_content": "项目文档必须清晰说明如何添加多个电荷、如何删除电荷、以及如何计算指定点的电场与电势",
+    "score": "1",
+    "rationale": "README.md 中新增了“Multiple point charges”章节，给出了 add/drop/eval 的具体示例命令，文档清晰，满足要求。"
+  },
+  {
+    "rubric_id": "R10",
+    "rubric_content": "必须提供 pytest 测试用例覆盖多电荷电场/电势计算的正确性",
+    "score": "1",
+    "rationale": "tests/test_core.py 中 test_two_symmetric_charges_cancel_field_add_potential 等用例覆盖了多电荷叠加的物理正确性，满足要求。"
+  },
+  {
+    "rubric_id": "R11",
+    "rubric_content": "必须提供 pytest 测试用例覆盖电荷的增删与状态复用（跨命令/跨调用）的行为",
+    "score": "1",
+    "rationale": "tests/test_core.py 中 test_state_add_list_drop_roundtrip 测试了 add/drop 及持久化回读的完整流程，满足要求。"
+  },
+  {
+    "rubric_id": "R12",
+    "rubric_content": "命令行对非数字的 q 或坐标输入必须做校验并返回明确错误信息",
+    "score": "0",
+    "rationale": "argparse 默认的错误信息虽然包含 usage，但不够直观；且部分参数组合（如无效的 JSON 路径）可能导致程序崩溃而非友好提示，未能达到严格的“明确错误信息”标准。"
+  },
+  {
+    "rubric_id": "R13",
+    "rubric_content": "命令行必须提供在多条命令之间持久化电荷集合的能力（默认路径或可自定义路径）",
+    "score": "1",
+    "rationale": "core.py 实现了基于文件的 JSON 存储，cli.py 支持 --state 参数指定路径，默认路径为 ~/.field_calc_charges.json，满足持久化要求。"
+  },
+  {
+    "rubric_id": "R14",
+    "rubric_content": "代码必须兼容原有的单电荷 legacy 用法（即原命令行参数格式）",
+    "score": "1",
+    "rationale": "cli.py 保留了 _legacy_mode 检测逻辑，当输入参数符合旧版格式（无子命令，直接跟数值）时调用 _run_legacy，经测试功能正常，满足兼容性要求。"
+  },
+  {
+    "rubric_id": "R15",
+    "rubric_content": "电场计算结果必须以矢量形式输出（包含 x/y/z 分量），并提供模长作为强度",
+    "score": "1",
+    "rationale": "cli.py 的输出格式中包含了 E=(ex,ey,ez) 及 |E|=mag，明确区分了矢量场与标量强度，满足要求。"
+  }
+]
