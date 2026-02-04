@@ -103,5 +103,12 @@
     "type": "Instruction Following",
     "necessity": "Explicit",
     "rationale": "题目要求给出电场强度（strength）；强度可理解为模长，而电场本身是矢量；可通过输出格式中是否包含分量与模长来验证。"
+  },
+  {
+    "rubric_id": "R16",
+    "rubric_content": "状态文件读写必须进行路径安全校验，禁止写入/读取系统敏感路径（如 /etc/passwd）",
+    "type": "Security",
+    "necessity": "Implicit",
+    "rationale": "为了安全性，必须对用户指定的 state_path 进行路径合法性校验，防止路径穿越或敏感文件覆盖；可通过代码是否包含路径白名单/黑名单或路径解析安全检查来验证。"
   }
 ]
